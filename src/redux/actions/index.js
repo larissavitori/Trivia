@@ -1,1 +1,6 @@
-// const ADD_EMAIL = 'ADD_EMAIL';
+export const SAVE_PROFILE = 'SAVE_PROFILE';
+
+export const saveProfile = (profile) => ({
+  type: SAVE_PROFILE,
+  payload: profile,
+});

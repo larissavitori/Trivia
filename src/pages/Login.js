@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { saveProfile } from '../redux/actions';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -6,13 +8,30 @@ class Login extends Component {
     playerName: '',
     playerEmail: '',
     isPlayDisabled: true,
+    token: '',
   };
 
   handleChange({ name, value }) {
-    this.setState({
-      [name]: value,
-    }, () => this.checkButton());
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => this.checkButton(),
+    );
   }
+
+  handleClick = async () => {
+    const { dispatch, history } = this.props;
+    const response = await fetch(
+      'https://opentdb.com/api_token.php?command=request',
+    );
+    const data = await response.json();
+    localStorage.setItem('token', data.token);
+    this.setState({ token: data.token }, () => {
+      dispatch(saveProfile(this.state));
+      history.push('/jogo');
+    });
+  };
 
   checkButton() {
     const { playerName, playerEmail } = this.state;
@@ -55,6 +74,7 @@ class Login extends Component {
             type="button"
             data-testid="btn-play"
             disabled={ isPlayDisabled }
+            onClick={ this.handleClick }
           >
             Play
           </button>
@@ -64,4 +84,11 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
+
+export default connect()(Login);
