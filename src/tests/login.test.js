@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 
 import App from '../App';
 import Login from '../pages/Login';
@@ -42,4 +42,30 @@ describe('Testes referente a página de Login', () => {
     const { pathname } = history.location;
     expect(pathname).toBe('/settings');
   });
+
+  it('testa se ao clicar em "Play" é feita uma requisição externa e redireciona a pagina de jogo', async () => {
+    const { history } = renderWithRouterAndRedux(<App />);
+
+    jest.spyOn(global, 'fetch');
+
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(''),
+    });;
+
+    const playButton = screen.getByTestId("btn-play");
+    const nameInput = screen.getByTestId("input-player-name");
+    const emailInput = screen.getByTestId("input-gravatar-email");
+
+    userEvent.type(nameInput, validName);
+    userEvent.type(emailInput, validEmail);
+
+    userEvent.click(playButton);
+
+    expect(global.fetch).toHaveBeenCalled();
+
+    await waitFor(() => {
+      const { pathname } = history.location;
+      expect(pathname).toBe('/jogo')
+    }, { timeout: 500 });
+  })
 });
