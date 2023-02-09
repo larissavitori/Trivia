@@ -20,7 +20,7 @@ class Login extends Component {
     );
   }
 
-  handleClick = async () => {
+  fetchRequest = async () => {
     const { dispatch, history } = this.props;
     const response = await fetch(
       'https://opentdb.com/api_token.php?command=request',
@@ -74,7 +74,7 @@ class Login extends Component {
             type="button"
             data-testid="btn-play"
             disabled={ isPlayDisabled }
-            onClick={ this.handleClick }
+            onClick={ this.fetchRequest }
           >
             Play
           </button>
