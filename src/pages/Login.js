@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { saveProfile } from '../redux/actions';
@@ -20,7 +21,7 @@ class Login extends Component {
     );
   }
 
-  fetchRequest = async () => {
+  fetchRequest() => {
     const { dispatch, history } = this.props;
     const response = await fetch(
       'https://opentdb.com/api_token.php?command=request',
@@ -32,6 +33,11 @@ class Login extends Component {
       history.push('/jogo');
     });
   };
+
+  handleClick() {
+    const { history } = this.props;
+    history.push('/settings');
+  }
 
   checkButton() {
     const { playerName, playerEmail } = this.state;
@@ -79,6 +85,14 @@ class Login extends Component {
             Play
           </button>
         </form>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ () => this.handleClick() }
+        >
+          Configurações
+
+        </button>
       </div>
     );
   }
