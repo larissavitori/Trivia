@@ -21,7 +21,12 @@ class Login extends Component {
     );
   }
 
-  fetchRequest() => {
+  handleClick() {
+    const { history } = this.props;
+    history.push('/settings');
+  }
+
+  fetchRequest = async () => {
     const { dispatch, history } = this.props;
     const response = await fetch(
       'https://opentdb.com/api_token.php?command=request',
@@ -33,11 +38,6 @@ class Login extends Component {
       history.push('/jogo');
     });
   };
-
-  handleClick() {
-    const { history } = this.props;
-    history.push('/settings');
-  }
 
   checkButton() {
     const { playerName, playerEmail } = this.state;
