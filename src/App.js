@@ -12,7 +12,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={ Login } />
         <Route exact path="/settings" component={ Settings } />
-        <Route path="/game" component={ Game } />
+        <Route exact path="/game" component={ Game } />
       </Switch>
     </div>
   );
