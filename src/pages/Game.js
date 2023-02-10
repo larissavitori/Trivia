@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import md5 from "crypto-js/md5";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
 
-import { getGameQuestions } from "../services/triviaAPI";
-import { prepareAnswersArray } from "../services/game";
+import { getGameQuestions } from '../services/triviaAPI';
+import { prepareAnswersArray } from '../services/game';
 
-import "../style/game.css";
-import { calculateScore } from "../redux/actions";
+import '../style/game.css';
+import { calculateScore } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -18,7 +18,7 @@ class Game extends Component {
   };
 
   async componentDidMount() {
-    const playerToken = localStorage.getItem("token");
+    const playerToken = localStorage.getItem('token');
     const questions = await getGameQuestions(playerToken);
     const { index } = this.state;
 
@@ -36,21 +36,22 @@ class Game extends Component {
     const { history } = this.props;
 
     if (questions.length === 0) {
-      localStorage.setItem("token", "");
-      history.push("/");
+      localStorage.setItem('token', '');
+      history.push('/');
       return true;
     }
   }
 
   showResponseAndCalculate(answer) {
     const { score, dispatch } = this.props;
+    const fixNumber = 10;
     const level = {
       hard: 3,
       medium: 2,
       easy: 1,
     };
 
-    const points = score + 10 + 1 * level[answer.difficulty];
+    const points = score + fixNumber + 1 * level[answer.difficulty];
     this.setState({
       show: true,
     });
@@ -68,7 +69,7 @@ class Game extends Component {
         <div>
           <img
             data-testid="header-profile-picture"
-            src={img}
+            src={ img }
             className="gravatar"
             alt="gravatar"
           />
@@ -83,11 +84,11 @@ class Game extends Component {
             <button
               type="button"
               className={
-                show && (answer.isCorrect ? "answer-correct" : "answer-wrong")
+                show && (answer.isCorrect ? 'answer-correct' : 'answer-wrong')
               }
-              key={index}
-              data-testid={answer.testId}
-              onClick={() => this.showResponseAndCalculate(answer)}
+              key={ index }
+              data-testid={ answer.testId }
+              onClick={ () => this.showResponseAndCalculate(answer) }
             >
               {answer.text}
             </button>
@@ -99,11 +100,13 @@ class Game extends Component {
 }
 
 Game.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
