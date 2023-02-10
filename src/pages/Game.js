@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import md5 from "crypto-js/md5";
 
-import { getGameQuestions } from '../services/triviaAPI';
-import { prepareAnswersArray } from '../services/game';
+import { getGameQuestions } from "../services/triviaAPI";
+import { prepareAnswersArray } from "../services/game";
 
-import '../style/game.css';
+import "../style/game.css";
+import { calculateScore } from "../redux/actions";
 
 class Game extends Component {
   state = {
@@ -17,7 +18,7 @@ class Game extends Component {
   };
 
   async componentDidMount() {
-    const playerToken = localStorage.getItem('token');
+    const playerToken = localStorage.getItem("token");
     const questions = await getGameQuestions(playerToken);
     const { index } = this.state;
 
@@ -35,16 +36,25 @@ class Game extends Component {
     const { history } = this.props;
 
     if (questions.length === 0) {
-      localStorage.setItem('token', '');
-      history.push('/');
+      localStorage.setItem("token", "");
+      history.push("/");
       return true;
     }
   }
 
-  showResponse() {
+  showResponseAndCalculate(answer) {
+    const { score, dispatch } = this.props;
+    const level = {
+      hard: 3,
+      medium: 2,
+      easy: 1,
+    };
+
+    const points = score + 10 + 1 * level[answer.difficulty];
     this.setState({
       show: true,
     });
+    if (answer.isCorrect) dispatch(calculateScore(points));
   }
 
   render() {
@@ -58,33 +68,30 @@ class Game extends Component {
         <div>
           <img
             data-testid="header-profile-picture"
-            src={ img }
+            src={img}
             className="gravatar"
             alt="gravatar"
           />
-          <p data-testid="header-player-name">
-            { name }
-          </p>
+          <p data-testid="header-player-name">{name}</p>
           <h3 data-testid="header-score"> placar:0 </h3>
         </div>
 
-        <h2 data-testid="question-category">{ question.category }</h2>
-        <p data-testid="question-text">{ question.question }</p>
+        <h2 data-testid="question-category">{question.category}</h2>
+        <p data-testid="question-text">{question.question}</p>
         <div data-testid="answer-options">
-          {
-            answers.map((answer, index) => (
-              <button
-                type="button"
-                className={ show
-                  && (answer.isCorrect ? 'show answer-correct' : 'show answer-wrong') }
-                key={ index }
-                data-testid={ answer.testId }
-                onClick={ ({ target: { className } }) => this.showResponse(className) }
-              >
-                {answer.text}
-              </button>
-            ))
-          }
+          {answers.map((answer, index) => (
+            <button
+              type="button"
+              className={
+                show && (answer.isCorrect ? "answer-correct" : "answer-wrong")
+              }
+              key={index}
+              data-testid={answer.testId}
+              onClick={() => this.showResponseAndCalculate(answer)}
+            >
+              {answer.text}
+            </button>
+          ))}
         </div>
       </div>
     );
@@ -102,6 +109,7 @@ Game.propTypes = {
 const mapStateToProps = (state) => ({
   name: state.playerReducer.name,
   email: state.playerReducer.email,
+  score: state.playerReducer.score,
 });
 
 export default connect(mapStateToProps)(Game);
