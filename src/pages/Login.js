@@ -35,7 +35,7 @@ class Login extends Component {
     localStorage.setItem('token', data.token);
     this.setState({ token: data.token }, () => {
       dispatch(saveProfile(this.state));
-      history.push('/jogo');
+      history.push('/game');
     });
   };
 
