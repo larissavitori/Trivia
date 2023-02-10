@@ -65,7 +65,7 @@ describe('Testes referente a página de Login', () => {
 
     await waitFor(() => {
       const { pathname } = history.location;
-      expect(pathname).toBe('/jogo')
+      expect(pathname).toBe('/game')
     }, { timeout: 500 });
   })
 });
