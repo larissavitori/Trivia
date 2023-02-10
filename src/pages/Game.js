@@ -8,6 +8,7 @@ import { prepareAnswersArray } from '../services/game';
 
 import '../style/game.css';
 import { calculateScore } from '../redux/actions';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
@@ -15,6 +16,8 @@ class Game extends Component {
     answers: [],
     index: 0,
     show: false,
+    timer: 30,
+    click: false,
   };
 
   async componentDidMount() {
@@ -26,10 +29,20 @@ class Game extends Component {
       return false;
     }
 
+    this.startTimer();
     this.setState({
       question: questions[index],
       answers: prepareAnswersArray(questions[index]),
     });
+  }
+
+  startTimer() {
+    const ONE_SECOND = 1000;
+    setInterval(() => {
+      this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    }, ONE_SECOND);
   }
 
   checkResponse(questions) {
@@ -54,12 +67,21 @@ class Game extends Component {
     const points = score + fixNumber + 1 * level[answer.difficulty];
     this.setState({
       show: true,
+      click: true,
+    });
+    if (answer.isCorrect) dispatch(calculateScore(points));
+  }
+
+  nextAnswer() {
+    this.componentDidMount();
+    this.setState({
+      show: false,
     });
     if (answer.isCorrect) dispatch(calculateScore(points));
   }
 
   render() {
-    const { question, answers, show } = this.state;
+    const { question, answers, show, timer, click } = this.state;
     const { name, email } = this.props;
     const hashGerada = md5(email).toString();
     const img = `https://www.gravatar.com/avatar/${hashGerada}`;
@@ -76,23 +98,35 @@ class Game extends Component {
           <p data-testid="header-player-name">{name}</p>
           <h3 data-testid="header-score"> placar:0 </h3>
         </div>
-
-        <h2 data-testid="question-category">{question.category}</h2>
-        <p data-testid="question-text">{question.question}</p>
-        <div data-testid="answer-options">
-          {answers.map((answer, index) => (
+        <Timer timer={ timer } />
+        <h2 data-testid="question-category">{ question.category }</h2>
+        <p data-testid="question-text">{ question.question }</p>
+        { (click)
+          && (
             <button
               type="button"
-              className={
-                show && (answer.isCorrect ? 'answer-correct' : 'answer-wrong')
-              }
-              key={ index }
-              data-testid={ answer.testId }
-              onClick={ () => this.showResponseAndCalculate(answer) }
+              data-testid="btn-next"
+              onClick={ () => this.nextAnswer() }
             >
-              {answer.text}
+              next
             </button>
-          ))}
+          )}
+        <div data-testid="answer-options">
+          {
+            answers.map((answer, index) => (
+              <button
+                type="button"
+                className={ show
+                    && (answer.isCorrect ? 'answer-correct' : 'answer-wrong') }
+                key={ index }
+                data-testid={ answer.testId }
+                disabled={ timer <= 0 }
+                onClick={ () => this.showResponseAndCalculate(answer) }
+              >
+                {answer.text}
+              </button>
+            ))
+          }
         </div>
       </div>
     );
@@ -110,9 +144,9 @@ Game.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  name: state.playerReducer.name,
-  email: state.playerReducer.email,
-  score: state.playerReducer.score,
+  name: state.player.name,
+  email: state.player.email,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Game);
