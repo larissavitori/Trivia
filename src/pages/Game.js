@@ -6,11 +6,14 @@ import md5 from 'crypto-js/md5';
 import { getGameQuestions } from '../services/triviaAPI';
 import { prepareAnswersArray } from '../services/game';
 
+import '../style/game.css';
+
 class Game extends Component {
   state = {
     question: {},
     answers: [],
     index: 0,
+    show: false,
   };
 
   async componentDidMount() {
@@ -38,8 +41,14 @@ class Game extends Component {
     }
   }
 
+  showResponse() {
+    this.setState({
+      show: true,
+    });
+  }
+
   render() {
-    const { question, answers } = this.state;
+    const { question, answers, show } = this.state;
     const { name, email } = this.props;
     const hashGerada = md5(email).toString();
     const img = `https://www.gravatar.com/avatar/${hashGerada}`;
@@ -66,8 +75,11 @@ class Game extends Component {
             answers.map((answer, index) => (
               <button
                 type="button"
+                className={ show
+                  && (answer.isCorrect ? 'show answer-correct' : 'show answer-wrong') }
                 key={ index }
                 data-testid={ answer.testId }
+                onClick={ ({ target: { className } }) => this.showResponse(className) }
               >
                 {answer.text}
               </button>

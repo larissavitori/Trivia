@@ -1,0 +1,12 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  }  
+
+.answer-correct {
+  border: 3px solid rgb(6, 240, 15);
+}
+
+.answer-wrong {
+  border: 3px solid red;
+}
