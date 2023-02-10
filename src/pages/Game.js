@@ -7,6 +7,7 @@ import { getGameQuestions } from '../services/triviaAPI';
 import { prepareAnswersArray } from '../services/game';
 
 import '../style/game.css';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
@@ -14,6 +15,7 @@ class Game extends Component {
     answers: [],
     index: 0,
     show: false,
+    timer: 30,
   };
 
   async componentDidMount() {
@@ -25,10 +27,20 @@ class Game extends Component {
       return false;
     }
 
+    this.startTimer();
     this.setState({
       question: questions[index],
       answers: prepareAnswersArray(questions[index]),
     });
+  }
+
+  startTimer() {
+    const ONE_SECOND = 1000;
+    setInterval(() => {
+      this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    }, ONE_SECOND);
   }
 
   checkResponse(questions) {
@@ -48,7 +60,7 @@ class Game extends Component {
   }
 
   render() {
-    const { question, answers, show } = this.state;
+    const { question, answers, show, timer } = this.state;
     const { name, email } = this.props;
     const hashGerada = md5(email).toString();
     const img = `https://www.gravatar.com/avatar/${hashGerada}`;
@@ -67,7 +79,7 @@ class Game extends Component {
           </p>
           <h3 data-testid="header-score"> placar:0 </h3>
         </div>
-
+        <Timer timer={ timer } />
         <h2 data-testid="question-category">{ question.category }</h2>
         <p data-testid="question-text">{ question.question }</p>
         <div data-testid="answer-options">
@@ -79,6 +91,7 @@ class Game extends Component {
                   && (answer.isCorrect ? 'show answer-correct' : 'show answer-wrong') }
                 key={ index }
                 data-testid={ answer.testId }
+                disabled={ timer <= 0 }
                 onClick={ ({ target: { className } }) => this.showResponse(className) }
               >
                 {answer.text}
@@ -100,8 +113,8 @@ Game.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  name: state.playerReducer.name,
-  email: state.playerReducer.email,
+  name: state.player.name,
+  email: state.player.email,
 });
 
 export default connect(mapStateToProps)(Game);
