@@ -7,6 +7,7 @@ import { getGameQuestions } from '../services/triviaAPI';
 import { prepareAnswersArray } from '../services/game';
 
 import '../style/game.css';
+import { calculateScore } from '../redux/actions';
 import Timer from '../components/Timer';
 
 class Game extends Component {
@@ -54,11 +55,21 @@ class Game extends Component {
     }
   }
 
-  showResponse() {
+  showResponseAndCalculate(answer) {
+    const { score, dispatch } = this.props;
+    const fixNumber = 10;
+    const level = {
+      hard: 3,
+      medium: 2,
+      easy: 1,
+    };
+
+    const points = score + fixNumber + 1 * level[answer.difficulty];
     this.setState({
       show: true,
       click: true,
     });
+    if (answer.isCorrect) dispatch(calculateScore(points));
   }
 
   nextAnswer() {
@@ -66,6 +77,7 @@ class Game extends Component {
     this.setState({
       show: false,
     });
+    if (answer.isCorrect) dispatch(calculateScore(points));
   }
 
   render() {
@@ -83,9 +95,7 @@ class Game extends Component {
             className="gravatar"
             alt="gravatar"
           />
-          <p data-testid="header-player-name">
-            { name }
-          </p>
+          <p data-testid="header-player-name">{name}</p>
           <h3 data-testid="header-score"> placar:0 </h3>
         </div>
         <Timer timer={ timer } />
@@ -107,11 +117,11 @@ class Game extends Component {
               <button
                 type="button"
                 className={ show
-                    && (answer.isCorrect ? 'show answer-correct' : 'show answer-wrong') }
+                    && (answer.isCorrect ? 'answer-correct' : 'answer-wrong') }
                 key={ index }
                 data-testid={ answer.testId }
                 disabled={ timer <= 0 }
-                onClick={ () => this.showResponse() }
+                onClick={ () => this.showResponseAndCalculate(answer) }
               >
                 {answer.text}
               </button>
@@ -124,16 +134,19 @@ class Game extends Component {
 }
 
 Game.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   name: state.player.name,
   email: state.player.email,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Game);

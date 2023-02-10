@@ -14,6 +14,7 @@ export const prepareAnswersArray = (question) => {
     text: answer,
     isCorrect: index === 0,
     testId: !index ? 'correct-answer' : `wrong-answer-${index - 1}`,
+    difficulty: question.difficulty,
   }));
   const shuffledAnswers = shuffleAnswersObject(answersObject);
   return shuffledAnswers;

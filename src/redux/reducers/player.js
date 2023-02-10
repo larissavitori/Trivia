@@ -1,4 +1,4 @@
-import { SAVE_PROFILE, SUBMIT_CORRECT, SUBMIT_WRONG } from '../actions';
+import { CALCULATE_SCORE, SAVE_PROFILE } from '../actions';
 
 const INITIAL_STATE = {
   token: '',
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   score: 0,
 };
 
-const player = (state = INITIAL_STATE, action) => {
+const playerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case SAVE_PROFILE:
     return {
@@ -16,22 +16,14 @@ const player = (state = INITIAL_STATE, action) => {
       name: action.payload.playerName,
       email: action.payload.playerEmail,
     };
-
-  case SUBMIT_CORRECT:
+  case CALCULATE_SCORE:
     return {
       ...state,
-      points: state.points + 1,
-      questionNumber: state.questionNumber + 1,
-    };
-
-  case SUBMIT_WRONG:
-    return {
-      ...state,
-      questionNumber: store.getState(questionNumber) + 1,
+      score: action.payload,
     };
   default:
     return state;
   }
 };
 
-export default player;
+export default playerReducer;
