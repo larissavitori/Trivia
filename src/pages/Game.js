@@ -55,7 +55,7 @@ class Game extends Component {
     }
   }
 
-  showResponseAndCalculate(answer) {
+  showResponseAndCalculate(answer, timer) {
     const { score, dispatch } = this.props;
     const fixNumber = 10;
     const level = {
@@ -63,8 +63,7 @@ class Game extends Component {
       medium: 2,
       easy: 1,
     };
-
-    const points = score + fixNumber + 1 * level[answer.difficulty];
+    const points = score + fixNumber + timer * level[answer.difficulty];
     this.setState({
       show: true,
       click: true,
@@ -121,7 +120,7 @@ class Game extends Component {
                 key={ index }
                 data-testid={ answer.testId }
                 disabled={ timer <= 0 }
-                onClick={ () => this.showResponseAndCalculate(answer) }
+                onClick={ () => this.showResponseAndCalculate(answer, timer) }
               >
                 {answer.text}
               </button>
