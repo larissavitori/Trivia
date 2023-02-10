@@ -14,6 +14,7 @@ class Game extends Component {
     answers: [],
     index: 0,
     show: false,
+    click: false,
   };
 
   async componentDidMount() {
@@ -44,11 +45,19 @@ class Game extends Component {
   showResponse() {
     this.setState({
       show: true,
+      click: true,
+    });
+  }
+
+  nextAnswer() {
+    this.componentDidMount();
+    this.setState({
+      show: false,
     });
   }
 
   render() {
-    const { question, answers, show } = this.state;
+    const { question, answers, show, click } = this.state;
     const { name, email } = this.props;
     const hashGerada = md5(email).toString();
     const img = `https://www.gravatar.com/avatar/${hashGerada}`;
@@ -70,16 +79,26 @@ class Game extends Component {
 
         <h2 data-testid="question-category">{ question.category }</h2>
         <p data-testid="question-text">{ question.question }</p>
+        { (click)
+          && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ () => this.nextAnswer() }
+            >
+              next
+            </button>
+          )}
         <div data-testid="answer-options">
           {
             answers.map((answer, index) => (
               <button
                 type="button"
                 className={ show
-                  && (answer.isCorrect ? 'show answer-correct' : 'show answer-wrong') }
+                    && (answer.isCorrect ? 'show answer-correct' : 'show answer-wrong') }
                 key={ index }
                 data-testid={ answer.testId }
-                onClick={ ({ target: { className } }) => this.showResponse(className) }
+                onClick={ () => this.showResponse() }
               >
                 {answer.text}
               </button>
