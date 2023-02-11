@@ -70,6 +70,7 @@ class Game extends Component {
 
   showResponseAndCalculate(answer, timer) {
     const { score, dispatch } = this.props;
+    console.log(answer);
     const fixNumber = 10;
     const level = {
       hard: 3,
