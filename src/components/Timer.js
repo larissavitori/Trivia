@@ -21,9 +21,7 @@ class Timer extends Component {
   render() {
     const { timer } = this.props;
 
-    return (
-      <h3>{ timer >= 0 ? timer : '0' }</h3>
-    );
+    return <h3>{timer >= 0 ? timer : '0'}</h3>;
   }
 }
 

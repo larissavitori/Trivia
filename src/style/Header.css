@@ -1,0 +1,23 @@
+.header-container {
+  align-items: center;
+  background-color: white;
+  display: flex;
+  gap: 50px;
+  justify-content: end;
+  padding: 40px 100px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+.header-container .header-wrapper {
+  align-items: center;
+  display: flex;
+  gap: 13px;
+}
+
+.header-wrapper img {
+  border-radius: 100%;
+  width: 40px;
+}

@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { saveProfile } from '../redux/actions';
-import logo from '../trivia.png';
+import Logo from '../components/Logo';
+import '../style/Login.css';
+import '../style/button.css';
 
 class Login extends Component {
   state = {
@@ -54,17 +56,14 @@ class Login extends Component {
   render() {
     const { playerName, playerEmail, isPlayDisabled } = this.state;
     return (
-      <div>
-        <header className="App-header">
-          <img src={ logo } className="App-logo" alt="logo" />
-          <p>SUA VEZ</p>
-        </header>
-        <form>
+      <div className="main-container">
+        <Logo />
+        <form className="login-container">
           <input
             type="text"
             data-testid="input-player-name"
             name="playerName"
-            placeholder="Nome"
+            placeholder="Qual o seu nome?"
             value={ playerName }
             onChange={ ({ target }) => this.handleChange(target) }
           />
@@ -72,7 +71,7 @@ class Login extends Component {
             type="text"
             data-testid="input-gravatar-email"
             name="playerEmail"
-            placeholder="e-mail"
+            placeholder="Qual seu e-mail?"
             value={ playerEmail }
             onChange={ ({ target }) => this.handleChange(target) }
           />
@@ -81,18 +80,19 @@ class Login extends Component {
             data-testid="btn-play"
             disabled={ isPlayDisabled }
             onClick={ this.fetchRequest }
+            className="primary button"
           >
             Play
           </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ () => this.handleClick() }
+            className="secondary button"
+          >
+            Configurações
+          </button>
         </form>
-        <button
-          type="button"
-          data-testid="btn-settings"
-          onClick={ () => this.handleClick() }
-        >
-          Configurações
-
-        </button>
       </div>
     );
   }
