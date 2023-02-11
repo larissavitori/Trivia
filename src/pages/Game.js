@@ -12,6 +12,7 @@ import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
+    questions: [],
     question: {},
     answers: [],
     index: 0,
@@ -23,16 +24,28 @@ class Game extends Component {
   async componentDidMount() {
     const playerToken = localStorage.getItem('token');
     const questions = await getGameQuestions(playerToken);
-    const { index } = this.state;
+
+    this.setState({ questions }, () => this.newQuestion());
+    this.startTimer();
+  }
+
+  newQuestion() {
+    const { questions, index } = this.state;
+    const { history } = this.props;
+    const maxQuestions = 5;
 
     if (this.checkResponse(questions)) {
       return false;
     }
+    if (index === maxQuestions) {
+      return history.push('/feedback');
+    }
 
-    this.startTimer();
     this.setState({
       question: questions[index],
       answers: prepareAnswersArray(questions[index]),
+      index: index + 1,
+      timer: 30,
     });
   }
 
@@ -72,11 +85,10 @@ class Game extends Component {
   }
 
   nextAnswer() {
-    this.componentDidMount();
+    this.newQuestion();
     this.setState({
       show: false,
     });
-    if (answer.isCorrect) dispatch(calculateScore(points));
   }
 
   render() {
@@ -98,34 +110,32 @@ class Game extends Component {
           <h3 data-testid="header-score"> placar:0 </h3>
         </div>
         <Timer timer={ timer } />
-        <h2 data-testid="question-category">{ question.category }</h2>
-        <p data-testid="question-text">{ question.question }</p>
-        { (click)
-          && (
+        <h2 data-testid="question-category">{question.category}</h2>
+        <p data-testid="question-text">{question.question}</p>
+        {click && (
+          <button
+            type="button"
+            data-testid="btn-next"
+            onClick={ () => this.nextAnswer() }
+          >
+            next
+          </button>
+        )}
+        <div data-testid="answer-options">
+          {answers.map((answer, index) => (
             <button
               type="button"
-              data-testid="btn-next"
-              onClick={ () => this.nextAnswer() }
+              className={
+                show && (answer.isCorrect ? 'answer-correct' : 'answer-wrong')
+              }
+              key={ index }
+              data-testid={ answer.testId }
+              disabled={ timer <= 0 }
+              onClick={ () => this.showResponseAndCalculate(answer, timer) }
             >
-              next
+              {answer.text}
             </button>
-          )}
-        <div data-testid="answer-options">
-          {
-            answers.map((answer, index) => (
-              <button
-                type="button"
-                className={ show
-                    && (answer.isCorrect ? 'answer-correct' : 'answer-wrong') }
-                key={ index }
-                data-testid={ answer.testId }
-                disabled={ timer <= 0 }
-                onClick={ () => this.showResponseAndCalculate(answer, timer) }
-              >
-                {answer.text}
-              </button>
-            ))
-          }
+          ))}
         </div>
       </div>
     );
