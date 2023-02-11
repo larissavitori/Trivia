@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   name: '',
   email: '',
   score: 0,
+  hits: 0,
 };
 
 const playerReducer = (state = INITIAL_STATE, action) => {
@@ -20,6 +21,7 @@ const playerReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       score: action.payload,
+      hits: state.hits + 1,
     };
   default:
     return state;
