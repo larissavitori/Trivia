@@ -70,7 +70,6 @@ class Game extends Component {
 
   showResponseAndCalculate(answer, timer) {
     const { score, dispatch } = this.props;
-    console.log(answer);
     const fixNumber = 10;
     const level = {
       hard: 3,
@@ -105,7 +104,6 @@ class Game extends Component {
             </h2>
             <p data-testid="question-text">{question.question}</p>
             <h1 className="timer">
-              Tempo:
               <Timer timer={ timer } />
             </h1>
           </div>
