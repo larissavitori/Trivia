@@ -11,6 +11,11 @@ class Feedback extends Component {
     this.checkassertions();
   }
 
+  handleClick = () => {
+    const { history } = this.props;
+    history.push('./');
+  };
+
   checkassertions() {
     const { assertions } = this.props;
     const maxassertions = 3;
@@ -30,6 +35,9 @@ class Feedback extends Component {
         <h1 data-testid="feedback-text">{message}</h1>
         <p data-testid="feedback-total-score">{score}</p>
         <p data-testid="feedback-total-question">{assertions}</p>
+        <button type="button" onClick={ this.handleClick } data-testid="btn-play-again">
+          Play Again
+        </button>
       </div>
     );
   }
@@ -43,6 +51,9 @@ const mapStateToProps = (state) => ({
 Feedback.propTypes = {
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(Feedback);
