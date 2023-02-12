@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
-
 import { getGameQuestions } from '../services/triviaAPI';
 import { prepareAnswersArray } from '../services/game';
 
 import '../style/game.css';
+import '../style/button.css';
 import { calculateScore } from '../redux/actions';
 import Timer from '../components/Timer';
+import Header from '../components/Header';
 
 class Game extends Component {
   state = {
@@ -70,7 +70,6 @@ class Game extends Component {
 
   showResponseAndCalculate(answer, timer) {
     const { score, dispatch } = this.props;
-    console.log(answer);
     const fixNumber = 10;
     const level = {
       hard: 3,
@@ -94,49 +93,49 @@ class Game extends Component {
 
   render() {
     const { question, answers, show, timer, click } = this.state;
-    const { name, email } = this.props;
-    const hashGerada = md5(email).toString();
-    const img = `https://www.gravatar.com/avatar/${hashGerada}`;
-
     return (
       <div>
-        <div>
-          <img
-            data-testid="header-profile-picture"
-            src={ img }
-            className="gravatar"
-            alt="gravatar"
-          />
-          <p data-testid="header-player-name">{name}</p>
-          <h3 data-testid="header-score"> placar:0 </h3>
-        </div>
-        <Timer timer={ timer } />
-        <h2 data-testid="question-category">{question.category}</h2>
-        <p data-testid="question-text">{question.question}</p>
-        {click && (
-          <button
-            type="button"
-            data-testid="btn-next"
-            onClick={ () => this.nextAnswer() }
-          >
-            next
-          </button>
-        )}
-        <div data-testid="answer-options">
-          {answers.map((answer, index) => (
-            <button
-              type="button"
-              className={
-                show && (answer.isCorrect ? 'answer-correct' : 'answer-wrong')
-              }
-              key={ index }
-              data-testid={ answer.testId }
-              disabled={ timer <= 0 }
-              onClick={ () => this.showResponseAndCalculate(answer, timer) }
-            >
-              {answer.text}
-            </button>
-          ))}
+        <Header />
+        <div className="questions-container">
+          <div className="question">
+            <div />
+            <h2 data-testid="question-category" className="category">
+              {question.category}
+            </h2>
+            <p data-testid="question-text">{question.question}</p>
+            <h1 className="timer">
+              <Timer timer={ timer } />
+            </h1>
+          </div>
+          <div className="wrapper">
+            <div data-testid="answer-options" className="options">
+              {answers.map((answer, index) => (
+                <button
+                  type="button"
+                  className={
+                    show
+                    && (answer.isCorrect ? 'answer-correct' : 'answer-wrong')
+                  }
+                  key={ index }
+                  data-testid={ answer.testId }
+                  disabled={ timer <= 0 }
+                  onClick={ () => this.showResponseAndCalculate(answer, timer) }
+                >
+                  {answer.text}
+                </button>
+              ))}
+            </div>
+            {click && (
+              <button
+                type="button"
+                data-testid="btn-next"
+                onClick={ () => this.nextAnswer() }
+                className="primary button"
+              >
+                next
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -148,8 +147,6 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
   score: PropTypes.number.isRequired,
 };
 

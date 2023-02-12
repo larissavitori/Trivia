@@ -1,0 +1,37 @@
+.feedback-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 45px;
+  text-align: center;
+}
+
+.feedback-container .message {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.feedback-container .subtitle {
+  color: #b5b5b5;
+  font-weight: 700;
+}
+
+.message.bad {
+  color: #ea5d5d;
+}
+
+.message.good {
+  color: #2fc18c;
+}
+
+.feedback .wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.feedback .wrapper * {
+  flex: 1 1 auto;
+}
