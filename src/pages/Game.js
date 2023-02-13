@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getGameQuestions } from '../services/triviaAPI';
-import { prepareAnswersArray } from '../services/game';
+import { prepareAnswersArray, saveScore } from '../services/game';
 
 import '../style/game.css';
 import '../style/button.css';
@@ -32,14 +32,16 @@ class Game extends Component {
 
   newQuestion() {
     const { questions, index } = this.state;
-    const { history } = this.props;
+    const { history, score } = this.props;
     const maxQuestions = 5;
 
     if (this.checkResponse(questions)) {
       return false;
     }
     if (index === maxQuestions) {
-      return history.push('/feedback');
+      saveScore(score);
+      history.push('/feedback');
+      return;
     }
 
     this.setState({

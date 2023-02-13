@@ -1,4 +1,4 @@
-import { CALCULATE_SCORE, SAVE_PROFILE } from '../actions';
+import { CALCULATE_SCORE, CLEAR_CURRENT_SCORE, SAVE_PROFILE } from '../actions';
 
 const INITIAL_STATE = {
   token: '',
@@ -23,6 +23,12 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       score: action.payload,
       assertions: state.assertions + 1,
     };
+  case CLEAR_CURRENT_SCORE:
+    return {
+      ...state,
+      score: 0,
+    };
+
   default:
     return state;
   }

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import '../style/Feedback.css';
+import { clearCurrentScore } from '../redux/actions';
 import Header from '../components/Header';
 
 class Feedback extends Component {
@@ -15,10 +17,12 @@ class Feedback extends Component {
   }
 
   handleClick = (type) => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
     switch (type) {
     case 'playAgain':
-      return history.push('./');
+      dispatch(clearCurrentScore());
+      history.push('./');
+      return false;
     case 'ranking':
       return history.push('./ranking');
     default:
@@ -97,6 +101,7 @@ const mapStateToProps = (state) => ({
 Feedback.propTypes = {
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
