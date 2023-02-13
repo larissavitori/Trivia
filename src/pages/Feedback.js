@@ -49,7 +49,6 @@ class Feedback extends Component {
           <p data-testid="header-score">
             { score }
           </p>
-          <h1 data-testid="feedback-text">{message}</h1>
           <h1 data-testid="feedback-text" className={ `message ${type}` }>
             {message}
           </h1>
