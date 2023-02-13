@@ -1,9 +1,9 @@
 .header-container {
-  display: flex;
   align-items: center;
   background-color: white;
-  justify-content: end;
+  display: flex;
   gap: 50px;
+  justify-content: end;
   padding: 40px 100px;
   position: absolute;
   right: 0;
