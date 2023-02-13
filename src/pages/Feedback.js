@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import md5 from 'crypto-js/md5';
+
 import '../style/Feedback.css';
 import { clearCurrentScore } from '../redux/actions';
+import Header from '../components/Header';
 
 class Feedback extends Component {
   state = {
@@ -42,21 +43,11 @@ class Feedback extends Component {
 
   render() {
     const { message, type } = this.state;
-    const { score, assertions, name, email } = this.props;
-    const hashGerada = md5(email).toString();
-    const img = `https://www.gravatar.com/avatar/${hashGerada}`;
+    const { score, assertions } = this.props;
     return (
       <div className="feedback">
         <div className="feedback-container">
-          <img
-            data-testid="header-profile-picture"
-            src={ img }
-            className="gravatar"
-            alt="gravatar"
-          />
-          <p data-testid="header-player-name">{name}</p>
-          <p>score:</p>
-          <p data-testid="header-score">{score}</p>
+          <Header />
           <h1 data-testid="feedback-text" className={ `message ${type}` }>
             {message}
           </h1>

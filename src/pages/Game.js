@@ -9,6 +9,7 @@ import '../style/button.css';
 import { calculateScore } from '../redux/actions';
 import Timer from '../components/Timer';
 import Header from '../components/Header';
+import Logo from '../components/Logo';
 
 class Game extends Component {
   state = {
@@ -99,6 +100,7 @@ class Game extends Component {
       <div>
         <Header />
         <div className="questions-container">
+          <Logo />
           <div className="question">
             <div />
             <h2 data-testid="question-category" className="category">
