@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import '../style/Feedback.css';
+import { clearCurrentScore } from '../redux/actions';
 
 class Feedback extends Component {
   state = {
@@ -15,10 +16,12 @@ class Feedback extends Component {
   }
 
   handleClick = (type) => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
     switch (type) {
     case 'playAgain':
-      return history.push('./');
+      dispatch(clearCurrentScore());
+      history.push('./');
+      return false;
     case 'ranking':
       return history.push('./ranking');
     default:
@@ -109,6 +112,7 @@ Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
