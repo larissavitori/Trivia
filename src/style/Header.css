@@ -1,9 +1,9 @@
 .header-container {
+  display: flex;
   align-items: center;
   background-color: white;
-  display: flex;
-  gap: 50px;
   justify-content: end;
+  gap: 50px;
   padding: 40px 100px;
   position: absolute;
   right: 0;
@@ -20,4 +20,18 @@
 .header-wrapper img {
   border-radius: 100%;
   width: 40px;
+}
+
+.header-container .star {
+  font-size: 20px;
+}
+
+.feedback .header-container {
+  position: inherit;
+}
+
+.feedback .header-container img {
+  position: absolute;
+  top: -165%;
+  width: 210px;
 }

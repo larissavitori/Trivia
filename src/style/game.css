@@ -2,6 +2,14 @@
   display: flex;
   gap: 120px;
   padding: 20px;
+  position: relative;
+}
+
+.questions-container .logo {
+  left: 111px;
+  position: absolute;
+  top: -280px;
+  z-index: 1;
 }
 
 .question {
