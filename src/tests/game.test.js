@@ -108,6 +108,8 @@ describe('testando a tela de game', () => {
     expect(history.location.pathname).toBe('/feedback');
 
     userEvent.click(screen.getByTestId('btn-ranking'));
-    expect(history.location.pathname).toBe('/ranking')
+    expect(history.location.pathname).toBe('/ranking');
+    userEvent.click(screen.getByTestId('btn-go-home'));
+    expect(history.location.pathname).toBe('/');
   });
 });
