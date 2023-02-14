@@ -17,11 +17,13 @@ class Feedback extends Component {
   }
 
   handleClick = (type) => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
     if (type === 'playAgain') {
       history.push('./');
+      dispatch(clearCurrentScore());
     } else {
       history.push('./ranking');
+      dispatch(clearCurrentScore());
     }
   };
 
