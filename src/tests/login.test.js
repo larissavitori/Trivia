@@ -62,7 +62,7 @@ describe('Testes referente a página de Login', () => {
     userEvent.click(playButton);
 
     expect(global.fetch).toHaveBeenCalled();
-
+  
     await waitFor(() => {
       const { pathname } = history.location;
       expect(pathname).toBe('/game')

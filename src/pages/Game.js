@@ -24,13 +24,13 @@ class Game extends Component {
 
   async componentDidMount() {
     const playerToken = localStorage.getItem('token');
+    const { history } = this.props;
 
     try {
       const questions = await getGameQuestions(playerToken);
       this.setState({ questions }, () => this.newQuestion());
       this.startTimer();
     } catch (e) {
-      const { history } = this.props;
       localStorage.setItem('token', '');
       return history.push('/');
     }
