@@ -16,13 +16,10 @@ class Feedback extends Component {
 
   handleClick = (type) => {
     const { history } = this.props;
-    switch (type) {
-    case 'playAgain':
-      return history.push('./');
-    case 'ranking':
-      return history.push('./ranking');
-    default:
-      return false;
+    if (type === 'playAgain') {
+      history.push('./');
+    } else {
+      history.push('./ranking');
     }
   };
 
