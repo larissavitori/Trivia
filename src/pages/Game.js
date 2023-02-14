@@ -24,10 +24,16 @@ class Game extends Component {
 
   async componentDidMount() {
     const playerToken = localStorage.getItem('token');
-    const questions = await getGameQuestions(playerToken);
 
-    this.setState({ questions }, () => this.newQuestion());
-    this.startTimer();
+    try {
+      const questions = await getGameQuestions(playerToken);
+      this.setState({ questions }, () => this.newQuestion());
+      this.startTimer();
+    } catch (e) {
+      const { history } = this.props;
+      localStorage.setItem('token', '');
+      return history.push('/');
+    }
   }
 
   newQuestion() {
@@ -35,9 +41,6 @@ class Game extends Component {
     const { history, score } = this.props;
     const maxQuestions = 5;
 
-    if (this.checkResponse(questions)) {
-      return false;
-    }
     if (index === maxQuestions) {
       saveScore(score);
       history.push('/feedback');
@@ -59,16 +62,6 @@ class Game extends Component {
         timer: prevState.timer - 1,
       }));
     }, ONE_SECOND);
-  }
-
-  checkResponse(questions) {
-    const { history } = this.props;
-
-    if (questions.length === 0) {
-      localStorage.setItem('token', '');
-      history.push('/');
-      return true;
-    }
   }
 
   showResponseAndCalculate(answer, timer) {
