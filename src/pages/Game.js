@@ -100,9 +100,9 @@ class Game extends Component {
               {question.category}
             </h2>
             <p data-testid="question-text">{question.question}</p>
-            <h1 className="timer">
+            <div className="timer">
               <Timer timer={ timer } />
-            </h1>
+            </div>
           </div>
           <div className="wrapper">
             <div data-testid="answer-options" className="options">

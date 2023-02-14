@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { clearCurrentScore } from '../redux/actions';
 
 class Ranking extends Component {
   state = {
@@ -20,8 +19,7 @@ class Ranking extends Component {
   };
 
   handleClick = () => {
-    const { history, dispatch } = this.props;
-    dispatch(clearCurrentScore());
+    const { history } = this.props;
     history.push('/');
   };
 
@@ -55,7 +53,6 @@ Ranking.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect()(Ranking);
