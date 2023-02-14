@@ -21,3 +21,17 @@
   border-radius: 100%;
   width: 40px;
 }
+
+.header-container .star {
+  font-size: 20px;
+}
+
+.feedback .header-container {
+  position: inherit;
+}
+
+.feedback .header-container img {
+  position: absolute;
+  top: -165%;
+  width: 210px;
+}

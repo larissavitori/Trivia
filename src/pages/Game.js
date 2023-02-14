@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getGameQuestions } from '../services/triviaAPI';
-import { prepareAnswersArray } from '../services/game';
+import { prepareAnswersArray, saveScore } from '../services/game';
 
 import '../style/game.css';
 import '../style/button.css';
 import { calculateScore } from '../redux/actions';
 import Timer from '../components/Timer';
 import Header from '../components/Header';
+import Logo from '../components/Logo';
 
 class Game extends Component {
   state = {
@@ -31,17 +32,19 @@ class Game extends Component {
       this.startTimer();
     } catch (e) {
       localStorage.setItem('token', '');
-      history.push('/');
+      return history.push('/');
     }
   }
 
   newQuestion() {
     const { questions, index } = this.state;
-    const { history } = this.props;
+    const { history, score } = this.props;
     const maxQuestions = 5;
 
     if (index === maxQuestions) {
-      return history.push('/feedback');
+      saveScore(score);
+      history.push('/feedback');
+      return;
     }
 
     this.setState({
@@ -90,6 +93,7 @@ class Game extends Component {
       <div>
         <Header />
         <div className="questions-container">
+          <Logo />
           <div className="question">
             <div />
             <h2 data-testid="question-category" className="category">
